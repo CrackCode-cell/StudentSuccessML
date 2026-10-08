@@ -1,4 +1,5 @@
 import pandas as pd
+import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -9,12 +10,9 @@ from sklearn.metrics import (
 )
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-import joblib
 
 
 def main():
-    print("Loading dataset...")
-
     data = pd.read_csv("data/student_data.csv")
 
     features = [
@@ -28,11 +26,6 @@ def main():
     X = data[features]
     y = data["success"]
 
-    print("\nFeatures:")
-    print(features)
-
-    print("\nSplitting dataset...")
-
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
@@ -41,25 +34,16 @@ def main():
         stratify=y
     )
 
-    print("Training examples:", len(X_train))
-    print("Testing examples:", len(X_test))
-
-    # Build a machine-learning pipeline.
     model = Pipeline([
         ("scaler", StandardScaler()),
         ("classifier", LogisticRegression())
     ])
 
-    print("\nTraining model...")
-
+    print("Training model...")
     model.fit(X_train, y_train)
 
-    print("Model training complete.")
-
-    # Make predictions
     predictions = model.predict(X_test)
 
-    # Evaluate model
     accuracy = accuracy_score(y_test, predictions)
 
     print("\nModel accuracy:")
@@ -71,11 +55,15 @@ def main():
     print("\nClassification report:")
     print(classification_report(y_test, predictions))
 
-    # Save trained model
+    classifier = model.named_steps["classifier"]
+
+    print("\nFeature importance:")
+    for feature, coefficient in zip(features, classifier.coef_[0]):
+        print(f"{feature}: {coefficient:.4f}")
+
     joblib.dump(model, "student_success_model.pkl")
 
-    print("\nSaved model as:")
-    print("student_success_model.pkl")
+    print("\nModel saved as student_success_model.pkl")
 
 
 if __name__ == "__main__":

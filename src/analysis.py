@@ -4,8 +4,6 @@ import seaborn as sns
 
 
 def main():
-    print("Loading student dataset...")
-
     data = pd.read_csv("data/student_data.csv")
 
     print("\nFirst five rows:")
@@ -15,7 +13,7 @@ def main():
     print(data.shape)
 
     print("\nDataset information:")
-    print(data.info())
+    data.info()
 
     print("\nSummary statistics:")
     print(data.describe())
@@ -26,19 +24,15 @@ def main():
     print("\nSuccess distribution:")
     print(data["success"].value_counts())
 
-    # Average study hours by success
-    print("\nAverage study hours:")
+    print("\nAverage study hours by success:")
     print(data.groupby("success")["study_hours"].mean())
 
-    # Average GPA by success
-    print("\nAverage previous GPA:")
+    print("\nAverage GPA by success:")
     print(data.groupby("success")["previous_gpa"].mean())
 
-    # Correlation matrix
     print("\nCorrelation matrix:")
     print(data.corr(numeric_only=True))
 
-    # Plot 1: Study hours vs success
     plt.figure(figsize=(8, 5))
     sns.boxplot(x="success", y="study_hours", data=data)
     plt.title("Study Hours vs Academic Success")
@@ -48,7 +42,6 @@ def main():
     plt.savefig("study_hours_vs_success.png")
     plt.show()
 
-    # Plot 2: GPA vs success
     plt.figure(figsize=(8, 5))
     sns.boxplot(x="success", y="previous_gpa", data=data)
     plt.title("Previous GPA vs Academic Success")
@@ -58,7 +51,6 @@ def main():
     plt.savefig("gpa_vs_success.png")
     plt.show()
 
-    # Plot 3: Correlation heatmap
     plt.figure(figsize=(9, 7))
     sns.heatmap(
         data.corr(numeric_only=True),

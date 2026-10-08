@@ -25,17 +25,23 @@ def main():
     }])
 
     prediction = model.predict(student)[0]
-
     probabilities = model.predict_proba(student)[0]
 
     probability_of_success = probabilities[1]
 
+    print("\nInput summary:")
+    print(f"Study hours: {study_hours}")
+    print(f"Attendance: {attendance}%")
+    print(f"Previous GPA: {previous_gpa}")
+    print(f"Assignment completion: {assignments_completed}%")
+    print(f"Sleep hours: {sleep_hours}")
+
     print("\nPrediction:")
 
     if prediction == 1:
-        print("The model predicts: Likely to meet the success threshold.")
+        print("Likely to meet the success threshold.")
     else:
-        print("The model predicts: Less likely to meet the success threshold.")
+        print("Less likely to meet the success threshold.")
 
     print(
         f"Estimated probability of success: "
